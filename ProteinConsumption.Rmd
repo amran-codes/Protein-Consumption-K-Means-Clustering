@@ -5,18 +5,9 @@ output: html_document
 ---
  
 
-#Intro
-#The objective of this project in R is to perform clustering analysis on protein consumption data for different European countries. The project involves the following steps:
+#Introduction
+#The objective of this project in R is to perform clustering analysis on protein consumption data for different European countries. The visualization and clustering analysis in this project provide valuable insights into European protein consumption patterns across different geographic regions and protein sources. By clustering the data based on similarities, distinct clusters are represented by different colors. One plot focuses on red and white meat consumption, revealing similarities in consumption patterns among European countries. Overall, these findings contribute to our understanding of European protein consumption by highlighting similarities and differences among regions and protein sources.
 
-Importing the datasets: The protein consumption data is read from a CSV file called "protein.csv" using the read.csv function.
-
-Scaling the data: The protein consumption data is scaled using the scale function to center the variables and make them comparable.
-
-Clustering red and white meat: The variables "RedMeat" and "WhiteMeat" are extracted from the scaled data. The k-means clustering algorithm is applied to these variables with k=3 (3 clusters). The resulting clusters are plotted on a scatter plot of red meat against white meat.
-
-Clustering all nine protein groups: The k-means clustering algorithm is applied to all nine protein groups in the scaled data with k=7 (7 clusters). The resulting clusters are analyzed and visualized on scatter plots of various protein variables (red meat vs white meat, milk vs eggs, milk vs cereals).
-
-Results analysis: The visualization results show the European protein consumption for different sources of proteins in different geographic regions. The data is clustered based on similarities, and the resulting clusters are represented by different colors. The plots demonstrate the consumption patterns of red and white meat, milk and eggs, and milk and cereals in European countries, highlighting the similarities in consumption among different regions.
 
 
 #Importing datasets
@@ -32,12 +23,11 @@ library(factoextra)
 protein <- read.csv("protein.csv", header=TRUE, row.names=1) 
 head(protein, 10)
 
-# Scaling the data
+# using the scale function to center the variables and make them comparable
 protein_scaled <- scale(protein, center=TRUE, scale=TRUE)
 
 
-#clustering  Red and White meat (p=2) and using 3 clusters (k=3)
-  # red and white meat
+#Clustering red and white meat: The variables "RedMeat" and "WhiteMeat" are extracted from the scaled data. The k-means clustering algorithm is applied to these variables with k=3 (3 clusters). The resulting clusters are plotted on a scatter plot of red meat against white meat.
 red_white = protein_scaled[,c("WhiteMeat","RedMeat")]
 head(red_white)
 plot(red_white)
@@ -53,7 +43,7 @@ text(red_white, labels=rownames(red_white),
 
 
 
-# clustering all nine protein groups and creating seven clusters.
+#Clustering all nine protein groups: The k-means clustering algorithm is applied to all nine protein groups in the scaled data with k=7 (7 clusters). The resulting clusters are analyzed and visualized on scatter plots of various protein variables (red meat vs white meat, milk vs eggs, milk vs cereals).
 cluster_all <- kmeans(protein_scaled, centers=7, nstart=30)
 names(cluster_all)
 
@@ -93,8 +83,9 @@ cluster_milkcereals <- kmeans(milk_cereals, centers=3)
 
 
 ## Results analysis
-  # The visualization results for all of these show European protein consumption for different sources of proteins in different geographic regions. To start my data is clustered based on similarities and the groups can be seen to have the same colors. In my results for example, one of my plots show the consumption of red and white meat in different European countries clustered together based on their protein (red and white meat) consumption values. In another plot, I looked at milk and eggs and their consumption in European countries which was clustered based on the similarities in the resulting values for consumption. I also included in my last plot, the visualization for milk vs cereal protein consumption in Europe which also clustered the results and or regions based on their similarities in consumption amount.
-  
+#The visualization results for all of these show European protein consumption for different sources of proteins in different geographic regions. The data is clustered based on similarities, and the resulting clusters are represented by different colors. In my results, one of the plots demonstrates the consumption of red and white meat in different European countries. The countries are clustered together based on their protein (red and white meat) consumption values, revealing similarities in consumption patterns among them, for example, countries like Germany, Austria, and Ireland have a high consumption of Red Meat, and countries such as the United Kingdom and France have a high consumption of White Meat. Another one of the plot's examines the consumption of milk and eggs in European countries, which is clustered based on similarities in the resulting values for consumption, for example, countries such as portugal and Romania have a low consumption of both Milk and Eggs, whereas countries such as the United Kingdom and Ireland have a high consumption of both milk and Eggs. Additionally, I included a plot that visualizes milk vs cereal protein consumption in Europe, clustering the regions based on their similarities in consumption amounts, for this plot we have countries such as Finland with a high consumption of milk but a low consumption of cereal, whereas we also have countries such as Bulgaria with a high consumption of cereal but a low consumption of milk.
+
+#In summary, the visualization and clustering analysis provide insights into European protein consumption patterns for various protein sources. The clusters allow us to identify groups of countries with similar consumption behaviors, contributing to our understanding of protein consumption across different regions.  
   
   #Fixing PDF knitting issue with this package
 install.packages("tinytex")
