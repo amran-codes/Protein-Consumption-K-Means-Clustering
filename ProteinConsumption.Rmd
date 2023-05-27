@@ -1,0 +1,107 @@
+---
+title: "K-Means Clustering"
+author: "Amran A"
+output: html_document
+---
+ 
+
+#Intro
+#The objective of this project in R is to perform clustering analysis on protein consumption data for different European countries. The project involves the following steps:
+
+Importing the datasets: The protein consumption data is read from a CSV file called "protein.csv" using the read.csv function.
+
+Scaling the data: The protein consumption data is scaled using the scale function to center the variables and make them comparable.
+
+Clustering red and white meat: The variables "RedMeat" and "WhiteMeat" are extracted from the scaled data. The k-means clustering algorithm is applied to these variables with k=3 (3 clusters). The resulting clusters are plotted on a scatter plot of red meat against white meat.
+
+Clustering all nine protein groups: The k-means clustering algorithm is applied to all nine protein groups in the scaled data with k=7 (7 clusters). The resulting clusters are analyzed and visualized on scatter plots of various protein variables (red meat vs white meat, milk vs eggs, milk vs cereals).
+
+Results analysis: The visualization results show the European protein consumption for different sources of proteins in different geographic regions. The data is clustered based on similarities, and the resulting clusters are represented by different colors. The plots demonstrate the consumption patterns of red and white meat, milk and eggs, and milk and cereals in European countries, highlighting the similarities in consumption among different regions.
+
+
+#Importing datasets
+```{r echo=FALSE}
+ #loading packages
+library(tidyverse)
+install.packages(cluster)
+library(cluster)
+install.packages(factoextra)
+library(factoextra)
+
+# Importing the data sets
+protein <- read.csv("protein.csv", header=TRUE, row.names=1) 
+head(protein, 10)
+
+# Scaling the data
+protein_scaled <- scale(protein, center=TRUE, scale=TRUE)
+
+
+#clustering  Red and White meat (p=2) and using 3 clusters (k=3)
+  # red and white meat
+red_white = protein_scaled[,c("WhiteMeat","RedMeat")]
+head(red_white)
+plot(red_white)
+
+# Used k-means to make 3 clusters
+cluster_redwhite <- kmeans(red_white, centers=3)
+
+# Plotting with the labels
+plot(red_white, xlim=c(-2,2.75), 
+     type="n", xlab="Red Meat", ylab="White Meat")  
+text(red_white, labels=rownames(red_white), 
+     col=rainbow(3)[cluster_redwhite$cluster])
+
+
+
+# clustering all nine protein groups and creating seven clusters.
+cluster_all <- kmeans(protein_scaled, centers=7, nstart=30)
+names(cluster_all)
+
+# Extract some of the information from the fitted model
+cluster_all$centers
+cluster_all$cluster
+
+
+
+# Resulting clusters (coloured) are on a scatter plot of white meat against red meat.
+  # Plotting the clustering on the red-white meat axes
+plot(protein_scaled[,"WhiteMeat"], protein_scaled[,"RedMeat"], xlim=c(-2,2.75), 
+     type="n", ylab="Red Meat", xlab="White Meat")
+text(protein_scaled[,"WhiteMeat"], protein_scaled[,"RedMeat"], labels=rownames(protein), 
+     col=rainbow(7)[cluster_all$cluster]) 
+
+# Plotting milk vs Eggs variables
+plot(protein_scaled[,"Eggs"], protein_scaled[,"Milk"], xlim=c(-2,2.75), 
+     type="n", xlab="Eggs", ylab="Milk")
+text(protein_scaled[,"Eggs"], protein_scaled[,"Milk"], labels=rownames(protein), 
+     col=rainbow(7)[cluster_all$cluster]) 
+
+# Plotting Milk vs Cereals variables
+plot(protein_scaled[,"Cereals"], protein_scaled[,"Milk"], xlim=c(-2,2.75), 
+     type="n", xlab="Cereals", ylab="Milk")
+text(protein_scaled[,"Cereals"], protein_scaled[,"Milk"], labels=rownames(protein), 
+     col=rainbow(7)[cluster_all$cluster])
+
+#clustering  Milk and Cereal  (p=2) and using 3 clusters (k=3)
+  # Milk and Cereal variables
+milk_cereals = protein_scaled[,c("Milk","Cereals")]
+head(milk_cereals)
+plot(milk_cereals)
+
+# Used k-means to make 3 clusters
+cluster_milkcereals <- kmeans(milk_cereals, centers=3)
+
+
+## Results analysis
+  # The visualization results for all of these show European protein consumption for different sources of proteins in different geographic regions. To start my data is clustered based on similarities and the groups can be seen to have the same colors. In my results for example, one of my plots show the consumption of red and white meat in different European countries clustered together based on their protein (red and white meat) consumption values. In another plot, I looked at milk and eggs and their consumption in European countries which was clustered based on the similarities in the resulting values for consumption. I also included in my last plot, the visualization for milk vs cereal protein consumption in Europe which also clustered the results and or regions based on their similarities in consumption amount.
+  
+  
+  #Fixing PDF knitting issue with this package
+install.packages("tinytex")
+tinytex::install_tinytex()
+
+
+```
+
+
+
